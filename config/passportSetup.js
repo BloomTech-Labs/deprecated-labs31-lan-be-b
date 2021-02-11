@@ -1,5 +1,5 @@
 const passport = require('passport');
-const LinkedInStrategy = require('passport-linkedin').Strategy;
+const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 // const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 // const GoogleStrategy = require('passport-google-oauth20').Strategy;
 // const FacebookStrategy = require('passport-facebook').Strategy;
@@ -27,39 +27,10 @@ passport.deserializeUser((id, done) => {
 //     done(null, user)
 //  })
 
-passport.use(new LinkedInStrategy({
-    consumerKey: process.env.LINKEDIN_CLIENT_ID,
-    consumerSecret: process.env.LINKEDIN_CLIENT_SECRET,
-    callbackURL: `${BACKEND_URL}/api/auth/linkedin/redirect`
-  }, (accessToken, refreshToken, profile, done) => {
-        console.log('LinkedIn strategy hit', profile);
-        const user = {
-            id: profile.id,
-            email: profile.emails[0].value,
-            display_name: profile.displayName,
-            profile_picture: profile.photos[3].value
-        };
-
-        User.find({ id: user.id })
-            .then(existingUser => {
-                console.log('existingUser', existingUser);
-                if (existingUser) {
-                    return done(null, existingUser);
-                } else {
-                    User.add(user)
-                        .then(newUser => {
-                            console.log('newUser', newUser)
-                            return done(null, newUser[0]);
-                        });
-                };
-            });
-}));
-
 // passport.use(new LinkedInStrategy({
-//     clientID: process.env.LINKEDIN_CLIENT_ID,
-//     clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
-//     callbackURL: `${BACKEND_URL}/api/auth/linkedin/redirect`,
-//     scope: ['r_emailaddress', 'r_liteprofile'],
+//     consumerKey: process.env.LINKEDIN_CLIENT_ID,
+//     consumerSecret: process.env.LINKEDIN_CLIENT_SECRET,
+//     callbackURL: `${BACKEND_URL}/api/auth/linkedin/redirect`
 //   }, (accessToken, refreshToken, profile, done) => {
 //         console.log('LinkedIn strategy hit', profile);
 //         const user = {
@@ -69,22 +40,51 @@ passport.use(new LinkedInStrategy({
 //             profile_picture: profile.photos[3].value
 //         };
 
-//         process.nextTick(() => {
-//             User.find({ id: user.id })
-//                 .then(existingUser => {
-//                     console.log('existingUser', existingUser);
-//                     if (existingUser) {
-//                         return done(null, existingUser);
-//                     } else {
-//                         User.add(user)
-//                             .then(newUser => {
-//                                 console.log('newUser', newUser)
-//                                 return done(null, newUser[0]);
-//                             });
-//                     };
-//                 });
-//         });
+//         User.find({ id: user.id })
+//             .then(existingUser => {
+//                 console.log('existingUser', existingUser);
+//                 if (existingUser) {
+//                     return done(null, existingUser);
+//                 } else {
+//                     User.add(user)
+//                         .then(newUser => {
+//                             console.log('newUser', newUser)
+//                             return done(null, newUser[0]);
+//                         });
+//                 };
+//             });
 // }));
+
+passport.use(new LinkedInStrategy({
+    clientID: process.env.LINKEDIN_CLIENT_ID,
+    clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+    callbackURL: `${BACKEND_URL}/api/auth/linkedin/redirect`,
+    scope: ['r_emailaddress', 'r_liteprofile'],
+  }, (accessToken, refreshToken, profile, done) => {
+        console.log('LinkedIn strategy hit', profile);
+        const user = {
+            id: profile.id,
+            email: profile.emails[0].value,
+            display_name: profile.displayName,
+            profile_picture: profile.photos[3].value
+        };
+
+        process.nextTick(() => {
+            User.find({ id: user.id })
+                .then(existingUser => {
+                    console.log('existingUser', existingUser);
+                    if (existingUser) {
+                        return done(null, existingUser);
+                    } else {
+                        User.add(user)
+                            .then(newUser => {
+                                console.log('newUser', newUser)
+                                return done(null, newUser[0]);
+                            });
+                    };
+                });
+        });
+}));
 
 // passport.use(new LinkedInStrategy({
 //     clientID: process.env.GOOGLE_CLIENT_ID,
