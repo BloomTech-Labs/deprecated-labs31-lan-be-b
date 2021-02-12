@@ -35,3 +35,5 @@ Make sure you have [PostgreSQL](https://www.postgresql.org/) installed on your c
 `LINKEDIN_CLIENT_ID`
 `LINKEDIN_CLIENT_SECRET`
 `LAN_TOKEN`
+
+test edit by David 10:08 2/12
