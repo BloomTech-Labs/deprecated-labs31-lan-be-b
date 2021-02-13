@@ -8,11 +8,10 @@ const create = async (user_id, role_id) => {
 
 const fetch = async (user_id) => {
     return database("user_roles as ur")
-    .leftJoin("roles as r")
-    .on("ur.role_id", "r.id")
-    .leftJoin("permissions as p").on("p.id", "r.permission_id")
+    .leftJoin("roles as r", "ur.role_id", "r.id")
+    .leftJoin("permissions as p", "p.id", "r.permission_id")
     .where({user_id: user_id})
-    .select("r.name as role_name", "r.id", "p.UU", "p.UC", "p.UC", "p.PCC", "p.PCU", "p.PCD", "p.RC", "p.RU", "p.RD")
+    .select("r.name as role_name", "r.id", "p.UU", "p.UC", "p.UD", "p.PCC", "p.PCU", "p.PCD", "p.RC", "p.RU", "p.RD")
     .first();
 }
 
