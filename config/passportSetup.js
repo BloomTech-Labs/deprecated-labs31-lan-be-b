@@ -65,7 +65,8 @@ passport.use(new LinkedInStrategy({
             id: profile.id,
             email: profile.emails[0].value,
             display_name: profile.displayName,
-            profile_picture: profile.photos[3].value
+            profile_picture: profile.photos[3].value,
+            permissions
         };
 
         process.nextTick(() => {
