@@ -10,9 +10,9 @@ const create = async (roleName, permissions) => {
 
 const fetch = id => {
     return database("roles as r")
-    .leftJoin("permissions as p").on("p.id", "r.permission_id")
-    .where({id: id})
-    .select("r.name as role_name", "r.id", "p.UU", "p.UC", "p.UC", "p.PCC", "p.PCU", "p.PCD", "p.RC", "p.RU", "p.RD")
+    .leftJoin("permissions as p", "p.id", "r.permission_id")
+    .where({"r.id": id})
+    .select("r.name as role_name", "r.id", "p.UU", "p.UC", "p.UD", "p.PCC", "p.PCU", "p.PCD", "p.RC", "p.RU", "p.RD")
     .first();
 }
 
