@@ -42,7 +42,11 @@ const fetchUsersLikedComments = userID => {
 
 const update = async (id, value) => {
     const {role_id} = value;
-    const user = await database('users').where('id', id).update(value).returning('*');
+    delete value.role_id;
+    if(Object.keys(value).length > 0){
+        await database('users').where('id', id).update(value);
+    }
+    const user = await database('users').where({id: id}).first();
     await UserRole.update(user.id, role_id);
 
     const role = await UserRole.fetch(user.id);
