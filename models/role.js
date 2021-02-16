@@ -1,4 +1,3 @@
-const { response } = require('express');
 const database = require('../database/dbConfig');
 const Permission =  require("./permission");
 
