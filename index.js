@@ -10,6 +10,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const commentRouter = require('./routes/comment');
+const roleRouter = require("./routes/roles");
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
+app.use("/api/roles", roleRouter);
 
 app.get('/', (request, response) => response.send({ message: 'Server working!' }));
 
