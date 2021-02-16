@@ -78,7 +78,7 @@ passport.use(new LinkedInStrategy({
                         User.add(user)
                             .then(newUser => {
                                 console.log('newUser', newUser)
-                                return done(null, newUser[0]);
+                                return done(null, newUser);
                             });
                     };
                 });
