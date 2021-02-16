@@ -31,7 +31,7 @@ const update = async (id, updates) => {
     let role = await database("roles").where({id: id}).update({name: updates.name}).returning("*");
     role = role[0];
     await Permission.update(role.permission_id, updates.permissions);
-    return role;
+    return await fetch(role.id);
 }
 
 const remove = async id => {
