@@ -12,7 +12,7 @@ const fetch = id => {
     return database("roles as r")
     .leftJoin("permissions as p", "p.id", "r.permission_id")
     .where({"r.id": id})
-    .select("r.name as role_name", "r.id", "p.UU", "p.UC", "p.UD", "p.PCC", "p.PCU", "p.PCD", "p.RC", "p.RU", "p.RD")
+    .select("r.name as role_name", "r.id", "p.UU", "p.UC", "p.UD", "p.PCU", "p.PCD", "p.RC", "p.RU", "p.RD")
     .first();
 }
 

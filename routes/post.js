@@ -10,6 +10,7 @@ app.post('/create', (request, response) => {
     const { question, answer, track, category } = request.body;
     
     Post.create({ user_id: userID, question, answer, track, category })
+        
         .then(res => response.status(200).json({ message: 'Post created successfully' }))
         .catch(err => {
             console.log(err);
