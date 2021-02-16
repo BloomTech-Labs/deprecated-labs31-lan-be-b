@@ -21,7 +21,8 @@ const create = async (name, permissions) => {
     const roleExists = await database("roles").where({name: name}).first();
     if(roleExists) return null;
     const permissionsId = await Permission.create(permissions);
-    return database("roles").insert({name: name, permission_id: permissionsId}).returning("*");
+    const newRole = await database("roles").insert({name: name, permission_id: permissionsId}).returning("*");
+    return await fetch(newRole[0].id);
 }
 
 //updates object looks like this:
