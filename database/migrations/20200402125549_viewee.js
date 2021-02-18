@@ -49,9 +49,7 @@ exports.up = (knex, Promise) => {
 			table.string('track')
 				// .notNullable()
 				.index();
-			table.string('category')
-				.notNullable()
-				.index();
+	
 			table.timestamps(true, true);
 		})
 		.createTable('comments', table => {
