@@ -1,11 +1,21 @@
 const database = require('../database/dbConfig');
+const UserRole = require("./user_role");
 
-const add = user => {
-    return database('users').insert(user).returning('*');
+const add = async (user, role_id=3) => {
+    const newUser = await database('users').insert(user).returning('*');
+    await UserRole.create(newUser.id, role_id);
+
+    const role = await UserRole.fetch(newUser.id);
+    newUser.permissions = role;
+    return newUser;
 };
 
-const find = filter => {
-    return database('users').where(filter).first();
+const find = async filter => {
+    const user = await database('users').where(filter).first();
+
+    const role = await UserRole.fetch(user.id);
+    user.permissions = role;
+    return user;
 };
 
 // Fetch all of a single user's posts
@@ -30,8 +40,18 @@ const fetchUsersLikedComments = userID => {
     return database('liked_comments').where('user_id', userID);
 };
 
-const update = (id, value) => {
-    return database('users').where('id', id).update(value).returning('*');
+const update = async (id, value) => {
+    const {role_id} = value;
+    delete value.role_id;
+    if(Object.keys(value).length > 0){
+        await database('users').where('id', id).update(value);
+    }
+    const user = await database('users').where({id: id}).first();
+    await UserRole.update(user.id, role_id);
+
+    const role = await UserRole.fetch(user.id);
+    user.permissions = role;
+    return user;
 };
 
 // Set a user's onboarded field to true
