@@ -3,11 +3,11 @@
 
 # Description of changes: 
 
-Created pull_request_template.md
+Please enter a description of what has changed in your code.  Also include the reason for the changes, and the type of change. 
 
 ## How was it tested? 
 
-Just added a documenting template, it works.
+include how you tested your software, and explain steps taken to verify it meets LAN[]B's standard practices. 
 
 ## PR Checklist: 
 
