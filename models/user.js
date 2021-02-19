@@ -1,9 +1,11 @@
 const database = require('../database/dbConfig');
 const UserRole = require("./user_role");
 
-const add = async (user, role_id=3) => {
-    const newUser = await database('users').insert(user).returning('*');
-    await UserRole.create(newUser.id, role_id);
+const add = async (user, roleName="alumni") => {
+    let newUser = await database('users').insert(user).returning('*');
+    const newRole = await database('roles').where({name: roleName}).first();
+    newUser = newUser[0];
+    await UserRole.create(newUser.id, newRole.id);
 
     const role = await UserRole.fetch(newUser.id);
     newUser.permissions = role;
@@ -12,9 +14,10 @@ const add = async (user, role_id=3) => {
 
 const find = async filter => {
     const user = await database('users').where(filter).first();
-
-    const role = await UserRole.fetch(user.id);
-    user.permissions = role;
+    if(user){
+        const role = await UserRole.fetch(user.id);
+        user.permissions = role;
+    }
     return user;
 };
 
@@ -47,10 +50,11 @@ const update = async (id, value) => {
         await database('users').where('id', id).update(value);
     }
     const user = await database('users').where({id: id}).first();
-    await UserRole.update(user.id, role_id);
-
-    const role = await UserRole.fetch(user.id);
-    user.permissions = role;
+    if(role_id){
+        await UserRole.update(user.id, role_id);
+        const role = await UserRole.fetch(user.id);
+        user.permissions = role;
+    }
     return user;
 };
 

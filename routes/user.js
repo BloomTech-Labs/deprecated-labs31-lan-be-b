@@ -18,6 +18,7 @@ app.get('/', (request, response) => {
 			onboarded: request.user.onboarded,
 			created_at: request.user.created_at,
 			updated_at: request.user.updated_at,
+			permissions: request.user.permissions
         }
 	});
 });

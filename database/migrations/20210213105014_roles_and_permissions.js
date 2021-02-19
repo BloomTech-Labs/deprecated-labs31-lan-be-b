@@ -5,7 +5,6 @@ exports.up = function(knex) {
         table.boolean("UC").defaultTo(false).notNullable();
         table.boolean("UU").defaultTo(false).notNullable();
         table.boolean("UD").defaultTo(false).notNullable();
-        table.boolean("PCC").defaultTo(true).notNullable();
         table.boolean("PCU").defaultTo(false).notNullable();
         table.boolean("PCD").defaultTo(false).notNullable();
         table.boolean("RC").defaultTo(false).notNullable();
