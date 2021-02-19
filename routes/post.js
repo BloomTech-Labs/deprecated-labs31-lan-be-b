@@ -7,9 +7,9 @@ const app = express.Router();
 // Create post
 app.post('/create', (request, response) => {
     const userID = request.user.id;
-    const { question, answer, track, category } = request.body;
+    const { question, answer, track } = request.body;
     
-    Post.create({ user_id: userID, question, answer, track, category })
+    Post.create({ user_id: userID, question, answer, track })
         .then(res => response.status(200).json({ message: 'Post created successfully' }))
         .catch(err => {
             console.log(err);
