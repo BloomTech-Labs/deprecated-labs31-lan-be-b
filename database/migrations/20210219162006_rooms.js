@@ -3,8 +3,8 @@ exports.up = function(knex) {
         table.increments();
         table.string("name").notNullable().unique();
         table.text("description");
-        table.string("icon").notNullable().defaultTo("/images/room-icon.png");
-        table.string("banner-image").notNullable().defaultTo("/images/room-banner.jpg");
+        table.string("icon").notNullable().defaultTo("localhost:5000/images/room-icon.png");
+        table.string("banner-image").notNullable().defaultTo("localhost:5000/images/room-banner.jpg");
     });
 };
 
