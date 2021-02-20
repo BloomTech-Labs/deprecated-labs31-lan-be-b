@@ -32,6 +32,27 @@ const fetch = postID => {
 		.first();
 };
 
+const fetchByRoom = (room_id) => {
+	return database('posts')
+		.join('users', 'posts.user_id', 'users.id')
+		.orderBy('posts.created_at', 'desc')
+		.select([
+			'posts.id',
+			'users.id as user_id',
+			'users.profile_picture',
+			'users.display_name',
+			'posts.track',
+			'posts.question',
+			'posts.answer',
+			'posts.likes',
+			'posts.comments',
+			'posts.created_at',
+			'posts.updated_at'
+		]).where({
+			room_id
+		});
+}
+
 // Fetch all posts
 // This is where search and sorting will occur
 const fetchRecent = () => {
@@ -44,7 +65,6 @@ const fetchRecent = () => {
 			'users.profile_picture',
 			'users.display_name',
 			'posts.track',
-			'posts.category',
 			'posts.question',
 			'posts.answer',
 			'posts.likes',
@@ -86,7 +106,6 @@ const fetchSearch = search => {
 			'users.profile_picture',
 			'users.display_name',
 			'posts.track',
-			'posts.category',
 			'posts.question',
 			'posts.answer',
 			'posts.likes',
@@ -121,6 +140,7 @@ module.exports = {
     create,
 	addPostLike,
 	fetch,
+	fetchByRoom,
 	fetchRecent,
 	fetchPopular,
 	fetchSearch,
