@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.string("name").notNullable().unique();
         table.text("description");
         table.string("icon").notNullable().defaultTo("localhost:5000/images/room-icon.png");
-        table.string("banner-image").notNullable().defaultTo("localhost:5000/images/room-banner.jpg");
+        table.string("banner_image").notNullable().defaultTo("localhost:5000/images/room-banner.jpg");
     });
 };
 
