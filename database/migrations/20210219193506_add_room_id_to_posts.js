@@ -11,7 +11,7 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema("posts", table=>{
+  return knex.schema.alterTable("posts", table=>{
       table.dropForeign("room_id");
       table.dropColumn("room_id");
   })
