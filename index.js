@@ -46,6 +46,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+//for local images
+app.use(express.static("public"));
+
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
