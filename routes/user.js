@@ -89,18 +89,6 @@ app.get('/comment/like', (request, response) => {
         });
 });
 
-//takes following req.body, All are optional
-//{
-//   role_id: integer
-//   track: string
-//   display_name: string
-//   email: string
-// }
-app.put("/:id", async (request, response)=>{
-	const updatedUser = await User.update(request.params.id, request.body);
-	response.status(201).json({user: updatedUser});
-})
-
 // Update user's display name
 app.put('/displayname', (request, response) => {
     const { userID, displayName } = request.body;
@@ -115,7 +103,7 @@ app.put('/track', (request, response) => {
 	userID = request.user.id;
 	track = request.body.track;
 	token = request.body.token;
-
+	console.log("jjjjjjjjjjjjjjjjjj")
 	if (track === 'Career Coach') {
 		if (token === process.env.LAN_TOKEN) {
 			User.update(userID, { track })
@@ -136,6 +124,18 @@ app.put('/track', (request, response) => {
 			});
 	};
 });
+
+//takes following req.body, All are optional
+//{
+//   role_id: integer
+//   track: string
+//   display_name: string
+//   email: string
+// }
+app.put("/:id", async (request, response)=>{
+	const updatedUser = await User.update(request.params.id, request.body);
+	response.status(201).json({user: updatedUser});
+})
 
 // Set a user's onboarded field to true
 app.put('/onboard', (request, response) => {
