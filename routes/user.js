@@ -23,6 +23,11 @@ app.get('/', (request, response) => {
 	});
 });
 
+app.get("/all", async (request, response)=>{
+	const users = await User.fetchAllUsers();
+	response.status(200).json({users});
+})
+
 // Fetch all of a single user's posts and comments
 // Can model helper function be consolidated?
 // Good idea, I'll think about this
@@ -53,6 +58,11 @@ app.get('/:id', (request, response) => {
         });
 });
 
+app.get("/:id/profile", async (request, response)=>{
+	const user = await User.find({id: request.params.id});
+	response.status(200).json({user})
+})
+
 // These are similar, but the one above works for any user
 
 // Fetch user's liked posts
@@ -79,6 +89,17 @@ app.get('/comment/like', (request, response) => {
         });
 });
 
+//takes following req.body, All are optional
+//{
+//   role_id: integer
+//   track: string
+//   display_name: string
+//   email: string
+// }
+app.put("/:id", async (request, response)=>{
+	const updatedUser = await User.update(request.params.id, request.body);
+	response.status(201).json({user: updatedUser});
+})
 
 // Update user's display name
 app.put('/displayname', (request, response) => {
