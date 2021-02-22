@@ -21,6 +21,15 @@ const find = async filter => {
     return user;
 };
 
+const fetchAllUsers = async () => {
+    const users = await database("users");
+    for(let user of users){
+        const role = await UserRole.fetch(user.id);
+        user.permissions = role;
+    }
+    return users;
+}
+
 // Fetch all of a single user's posts
 const fetchPosts = userID => {
     return database('posts').where('user_id', userID);
@@ -44,17 +53,23 @@ const fetchUsersLikedComments = userID => {
 };
 
 const update = async (id, value) => {
-    const {role_id} = value;
+    const role_id = value.role_id;
     delete value.role_id;
-    if(Object.keys(value).length > 0){
-        await database('users').where('id', id).update(value);
+    const updates = {}
+    if(value.track) updates.track = value.track;
+    if(value.display_name) updates.display_name = value.display_name;
+    if(value.email) updates.email = value.email;
+    
+    if(Object.keys(updates).length > 0){
+        await database('users').where('id', id).update(updates);
     }
     const user = await database('users').where({id: id}).first();
     if(role_id){
         await UserRole.update(user.id, role_id);
-        const role = await UserRole.fetch(user.id);
-        user.permissions = role;
+        
     }
+    const role = await UserRole.fetch(user.id);
+    user.permissions = role;
     return user;
 };
 
@@ -66,6 +81,7 @@ const onboard = userID => {
 module.exports = {
     add,
     find,
+    fetchAllUsers,
     fetchPosts,
     fetchComments,
     fetchUsersLikedPosts,
