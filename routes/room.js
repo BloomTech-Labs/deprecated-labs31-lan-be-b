@@ -6,7 +6,7 @@ const rooms = require("../models/room");
 
 //View List of All Rooms 
 app.get('/', async (request, response)=>{
-    if(request.user.permissions["UU"] !== true) return response.status(403).json({message: "Action Not Permitted"});
+    if(request.user.permissions["RU"] !== true) return response.status(403).json({message: "Action Not Permitted"});
     
     const rooms = await rooms.fetchAll();
     
@@ -24,7 +24,7 @@ app.post("/", async (request, response)=>{
 })
 //Search for Single Room 
 app.get("/:id", async (request, response)=>{
-    if(request.user.permissions["UU"] !== true) return 
+    if(request.user.permissions["RU"] !== true) return 
     
     response.status(403).json({message: "Action Not Permitted"});
     
@@ -38,7 +38,7 @@ app.get("/:id", async (request, response)=>{
 // Update Room by ID
 app.put("/:id", async (request, response) => {
     
-    if(request.user.permissions["UU"] !== true) return 
+    if(request.user.permissions["RU"] !== true) return 
     response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
@@ -49,7 +49,7 @@ app.put("/:id", async (request, response) => {
 
 //Delete Room 
 app.delete("/:id", async (request, response) => {
-    if(request.user.permissions["UU"] !== true) return 
+    if(request.user.permissions["RU"] !== true) return 
     
     response.status(403).json({message: "Action Not Permitted"});
     
