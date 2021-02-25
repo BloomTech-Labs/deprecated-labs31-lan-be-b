@@ -11,7 +11,7 @@ const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const commentRouter = require('./routes/comment');
 const roleRouter = require("./routes/roles");
-
+const roomsRouter = require("./routes/room");
 const app = express();
 
 const FRONTEND_URL = process.env.FRONTEND_DEPLOYED_URL || 'http://localhost:3000';
