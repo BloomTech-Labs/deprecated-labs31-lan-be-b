@@ -6,7 +6,7 @@ const rooms = require("../models/room");
 
 //View List of All Rooms 
 app.get('/', async (request, response)=>{
-    if(request.user.permissions["RU"] !== true) return response.status(403).json({message: "Action Not Permitted"});
+    // if(request.user.permissions["RU"] !== true) return response.status(403).json({message: "Action Not Permitted"});
     
     const rooms = await rooms.fetchAll();
     
@@ -15,6 +15,9 @@ app.get('/', async (request, response)=>{
 
 //Create New Room 
 app.post("/", async (request, response)=>{
+    // if(request.user.permissions["RU"] !== true) return 
+    // response.status(403).json({message: "Action Not Permitted"});
+
     const {name, permissions} = request.body;
     const newroom = await rooms.create(name, permissions);
     
@@ -24,9 +27,9 @@ app.post("/", async (request, response)=>{
 })
 //Search for Single Room 
 app.get("/:id", async (request, response)=>{
-    if(request.user.permissions["RU"] !== true) return 
+    // if(request.user.permissions["RU"] !== true) return 
     
-    response.status(403).json({message: "Action Not Permitted"});
+    // response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
     const room = await rooms.fetch(id);
@@ -38,8 +41,8 @@ app.get("/:id", async (request, response)=>{
 // Update Room by ID
 app.put("/:id", async (request, response) => {
     
-    if(request.user.permissions["RU"] !== true) return 
-    response.status(403).json({message: "Action Not Permitted"});
+    // if(request.user.permissions["RU"] !== true) return 
+    // response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
     const updatedroom = await rooms.update(id, request.body)
@@ -49,9 +52,9 @@ app.put("/:id", async (request, response) => {
 
 //Delete Room 
 app.delete("/:id", async (request, response) => {
-    if(request.user.permissions["RU"] !== true) return 
+    // if(request.user.permissions["RU"] !== true) return 
     
-    response.status(403).json({message: "Action Not Permitted"});
+    // response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
     const deletedroom = await rooms.remove(id);

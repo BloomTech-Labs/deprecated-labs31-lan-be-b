@@ -54,6 +54,7 @@ app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 app.use("/api/roles", roleRouter);
+app.use("/api/room", roomsRouter);
 
 app.get('/', (request, response) => response.send({ message: 'Server working!' }));
 
