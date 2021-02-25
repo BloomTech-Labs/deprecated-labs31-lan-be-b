@@ -53,6 +53,7 @@ app.post('/popular', (request, response) => {
 // Searches
 app.post('/search', (request, response) => {
     const search = request.body.search;
+    const {orderBy} = req.query;
     
     Post.fetchSearch(search)
         .then(res => response.status(200).json(res))
