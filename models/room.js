@@ -5,8 +5,8 @@ const fetchAll = () => {
     return database("rooms");
 }
 
-const fetch = async (name) => {
-    const room = await database("rooms").where({name}).first();
+const fetch = async (id) => {
+    const room = await database("rooms").where({id}).first();
     if(room){
         const posts = await Post.fetchByRoom(room.id);
         room.posts = posts;
@@ -27,20 +27,21 @@ const create = async (name, description, banner_image=null, icon=null) => {
 }
 
 
-const update = async (originalName, name, description, banner_image=null, icon=null) => {
+const update = async (id, updates) => {
+    const {name, description, banner_image, icon} = updates;
     const roomData = {
         description
     }
-    if(name !== originalName) roomData.name = name;
+    if(name) roomData.name = name;
     if(banner_image) roomData.banner_image = banner_image;
     if(icon) roomData.icon = icon;
 
-    const roomName = await database("rooms").where({name: originalName}).update(roomData).returning("name");
-    return fetch(roomName[0]);
+    await database("rooms").where({id}).update(roomData);
+    return fetch(id);
 }
 
-const remove = async (name) => {
-    return database("rooms").where({name}).del().returning("*");
+const remove = async (id) => {
+    return database("rooms").where({id}).del().returning("*");
 }
 
 module.exports = {
