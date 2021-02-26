@@ -14,7 +14,8 @@ const fetch = async (id) => {
     return room;
 }
 
-const create = async (name, description, banner_image=null, icon=null) => {
+const create = async (data) => {
+    const {name, description, banner_image, icon} = data;
     const roomData = {
         name,
         description
@@ -22,7 +23,7 @@ const create = async (name, description, banner_image=null, icon=null) => {
     if(banner_image) roomData.banner_image = banner_image;
     if(icon) roomData.icon = icon;
 
-    const roomName = await database("rooms").insert(roomData).returning("name");
+    const roomName = await database("rooms").insert(roomData).returning("id");
     return fetch(roomName[0]);
 }
 
