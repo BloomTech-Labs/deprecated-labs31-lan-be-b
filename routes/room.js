@@ -1,14 +1,14 @@
 const express = require('express');
 
 const app = express.Router();
-const rooms = require("../models/room");
+const Room = require("../models/room");
 
 
 //View List of All Rooms 
 app.get('/', async (request, response)=>{
     // if(request.user.permissions["RU"] !== true) return response.status(403).json({message: "Action Not Permitted"});
     
-    const rooms = await rooms.fetchAll();
+    const rooms = await Room.fetchAll();
     
     response.status(200).json({rooms});
 });
@@ -19,7 +19,7 @@ app.post("/", async (request, response)=>{
     // response.status(403).json({message: "Action Not Permitted"});
 
     const {name, permissions} = request.body;
-    const newroom = await rooms.create(name, permissions);
+    const newroom = await Room.create(name, permissions);
     
     if(!newroom) return response.status(400).json({message: `room "${name}" already exists`})
     
@@ -32,7 +32,7 @@ app.get("/:id", async (request, response)=>{
     // response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
-    const room = await rooms.fetch(id);
+    const room = await Room.fetch(id);
     
     if(!room) return response.status(400).json({message: "Invalid room id"});
     response.status(200).json({room});
@@ -45,7 +45,7 @@ app.put("/:id", async (request, response) => {
     // response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
-    const updatedroom = await rooms.update(id, request.body)
+    const updatedroom = await Room.update(id, request.body)
     
     response.status(201).json({room: updatedroom})  
 });
@@ -57,7 +57,7 @@ app.delete("/:id", async (request, response) => {
     // response.status(403).json({message: "Action Not Permitted"});
     
     const {id} = request.params;
-    const deletedroom = await rooms.remove(id);
+    const deletedroom = await Room.remove(id);
     
     if(!deletedroom) return response.status(400).json({message: "This room cannot be deleted"});
     response.status(201).json({message: "The room has been deleted", deletedroom});
