@@ -65,9 +65,12 @@ app.post('/search', (request, response) => {
 });
 
 // Like post
-app.get('/like/:id', (request, response) => {
+app.get('/like/:id', async (request, response) => {
     const userID = request.user.id;
     const postID = request.params.id;
+
+    const alreadyLiked = await Post.postAlreadyLiked(userID, postID);
+    if(alreadyLiked) return response.status(400).json({message: "Post already liked"});
 
     Post.incrementPostLikes(postID)
         .then(res => {

@@ -10,6 +10,10 @@ const addPostLike = (userID, postID) => {
     return database('liked_posts').insert({ user_id: userID, post_id: postID });
 };
 
+const postAlreadyLiked = (userID, postID) => {
+	return database("liked_posts").where({user_id: userID, post_id: postID}).first();
+}
+
 // Fetch individual post
 const fetch = postID => {
     return database('posts')
@@ -156,6 +160,7 @@ const removePostLike = (userID, postID) => {
 module.exports = {
     create,
 	addPostLike,
+	postAlreadyLiked,
 	fetch,
 	fetchByRoom,
 	fetchRecent,
