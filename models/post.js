@@ -124,6 +124,7 @@ const fetchSearch = (search, orderBy, page=1, postsPerPage=10) => {
 			break;
 		case "popular":
 			query.orderBy("posts.likes", "desc");
+			break;
 	}
 	query.limit(postsPerPage)
 		.offset(postsPerPage * Math.abs(page - 1))
