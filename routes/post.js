@@ -7,9 +7,9 @@ const app = express.Router();
 // Create post
 app.post('/create', (request, response) => {
     const userID = request.user.id;
-    const { question, answer, track } = request.body;
+    const { question, answer, track, room_id} = request.body;
     
-    Post.create({ user_id: userID, question, answer, track })
+    Post.create({ user_id: userID, question, answer, track, room_id})
         .then(res => response.status(200).json({ message: 'Post created successfully' }))
         .catch(err => {
             console.log(err);
@@ -53,8 +53,9 @@ app.post('/popular', (request, response) => {
 // Searches
 app.post('/search', (request, response) => {
     const search = request.body.search;
+    const {orderBy} = request.query;
     
-    Post.fetchSearch(search)
+    Post.fetchSearch(search, orderBy)
         .then(res => response.status(200).json(res))
         .catch(err => {
             console.log(err);

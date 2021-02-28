@@ -93,11 +93,9 @@ const fetchPopular = () => {
 		]);
 };
 
-const fetchSearch = search => {
-	return database('posts')
+const fetchSearch = (search, orderBy) => {
+	const query = database('posts')
 		.join('users', 'posts.user_id', 'users.id')
-		.whereRaw(`LOWER(posts.question) LIKE ?`, [`%${search}%`])
-		.orWhereRaw(`LOWER(posts.answer) LIKE ?`, [`%${search}%`])
 		.select([
 			'posts.id',
 			'users.id as user_id',
@@ -111,6 +109,24 @@ const fetchSearch = search => {
 			'posts.created_at',
 			'posts.updated_at'
 		]);
+	if(search){
+		query.whereRaw(`LOWER(posts.question) LIKE ?`, [`%${search.toLowerCase()}%`])
+			.orWhereRaw(`LOWER(posts.answer) LIKE ?`, [`%${search.toLowerCase()}%`])
+	}
+	switch (orderBy){
+		case "recent":
+		case null:
+		case undefined:
+			query.orderBy("created_at", "desc");
+			break;
+		case "oldest":
+			query.orderBy("created_at", "asc");
+			break;
+		case "popular":
+			query.orderBy("posts.likes", "desc");
+	}
+
+	return query;
 };
 
 const incrementPostLikes = postID => {
