@@ -53,9 +53,10 @@ app.post('/popular', (request, response) => {
 // Searches
 app.post('/search', (request, response) => {
     const search = request.body.search;
-    const {orderBy} = request.query;
+    const {orderBy, page, postsPerPage} = request.query;
+    const numOfPosts = ! Number.isNaN(parseInt(postsPerPage)) && parseInt(postsPerPage) > 0 ? parseInt(postsPerPage): 10;
     
-    Post.fetchSearch(search, orderBy)
+    Post.fetchSearch(search, orderBy, page, numOfPosts)
         .then(res => response.status(200).json(res))
         .catch(err => {
             console.log(err);

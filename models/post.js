@@ -93,7 +93,7 @@ const fetchPopular = () => {
 		]);
 };
 
-const fetchSearch = (search, orderBy) => {
+const fetchSearch = (search, orderBy, page=1, postsPerPage=10) => {
 	const query = database('posts')
 		.join('users', 'posts.user_id', 'users.id')
 		.select([
@@ -125,6 +125,8 @@ const fetchSearch = (search, orderBy) => {
 		case "popular":
 			query.orderBy("posts.likes", "desc");
 	}
+	query.limit(postsPerPage)
+		.offset(postsPerPage * Math.abs(page - 1))
 
 	return query;
 };
