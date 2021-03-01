@@ -17,11 +17,9 @@ app.get('/', async (request, response)=>{
 app.post("/", async (request, response)=>{
     // if(request.user.permissions["RU"] !== true) return 
     // response.status(403).json({message: "Action Not Permitted"});
-
-    const {name, permissions} = request.body;
-    const newroom = await Room.create(name, permissions);
+    const newroom = await Room.create(request.body);
     
-    if(!newroom) return response.status(400).json({message: `room "${name}" already exists`})
+    if(!newroom) return response.status(400).json({message: `room already exists`})
     
     response.status(201).json({room: newroom});
 })

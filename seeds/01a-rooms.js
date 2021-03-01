@@ -1,6 +1,6 @@
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('rooms').del()
+  return knex.schema.raw('TRUNCATE TABLE rooms CASCADE')
     .then(function () {
       // Inserts seed entries
       return knex('rooms').insert([
