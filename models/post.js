@@ -97,7 +97,7 @@ const fetchPopular = () => {
 		]);
 };
 
-const fetchSearch = (search, orderBy, page=1, postsPerPage=10) => {
+const fetchSearch = (search, orderBy, page=1, postsPerPage=10, room_id=null) => {
 	const query = database('posts')
 		.join('users', 'posts.user_id', 'users.id')
 		.select([
@@ -116,6 +116,9 @@ const fetchSearch = (search, orderBy, page=1, postsPerPage=10) => {
 	if(search){
 		query.whereRaw(`LOWER(posts.question) LIKE ?`, [`%${search.toLowerCase()}%`])
 			.orWhereRaw(`LOWER(posts.answer) LIKE ?`, [`%${search.toLowerCase()}%`])
+	}
+	if(room_id){
+		query.where({room_id});
 	}
 	switch (orderBy){
 		case "recent":
