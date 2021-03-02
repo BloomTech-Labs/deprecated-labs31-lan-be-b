@@ -57,10 +57,13 @@ app.get('/popular/:id', (request, response) => {
 
 // Like comment
 // We need this in order to keep track of what comments a user has liked
-app.get('/like/:id', (request, response) => {
+app.get('/like/:id', async (request, response) => {
     userID = request.user.id;
     commentID = Number(request.params.id);
 
+    const alreadyLiked = Comment.commentAlreadyLiked(userID, commentID);
+    if(alreadyLiked) return response.status(400).json({message: "Comment already liked."});
+    
     Comment.incrementCommentLikes(commentID)
         .then(res => {
             Comment.addCommentLike(userID, commentID)

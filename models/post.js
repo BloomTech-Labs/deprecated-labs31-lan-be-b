@@ -10,6 +10,10 @@ const addPostLike = (userID, postID) => {
     return database('liked_posts').insert({ user_id: userID, post_id: postID });
 };
 
+const postAlreadyLiked = (userID, postID) => {
+	return database("liked_posts").where({user_id: userID, post_id: postID}).first();
+}
+
 // Fetch individual post
 const fetch = postID => {
     return database('posts')
@@ -93,11 +97,9 @@ const fetchPopular = () => {
 		]);
 };
 
-const fetchSearch = search => {
-	return database('posts')
+const fetchSearch = (search, orderBy, page=1, postsPerPage=10, room_id=null) => {
+	const query = database('posts')
 		.join('users', 'posts.user_id', 'users.id')
-		.whereRaw(`LOWER(posts.question) LIKE ?`, [`%${search}%`])
-		.orWhereRaw(`LOWER(posts.answer) LIKE ?`, [`%${search}%`])
 		.select([
 			'posts.id',
 			'users.id as user_id',
@@ -111,6 +113,30 @@ const fetchSearch = search => {
 			'posts.created_at',
 			'posts.updated_at'
 		]);
+	if(search){
+		query.whereRaw(`LOWER(posts.question) LIKE ?`, [`%${search.toLowerCase()}%`])
+			.orWhereRaw(`LOWER(posts.answer) LIKE ?`, [`%${search.toLowerCase()}%`])
+	}
+	if(room_id){
+		query.where({room_id});
+	}
+	switch (orderBy){
+		case "recent":
+		case null:
+		case undefined:
+			query.orderBy("created_at", "desc");
+			break;
+		case "oldest":
+			query.orderBy("created_at", "asc");
+			break;
+		case "popular":
+			query.orderBy([{column: "posts.likes", order: "desc"}, {column: "posts.created_at", order: "asc"}]);
+			break;
+	}
+	query.limit(postsPerPage)
+		.offset(postsPerPage * Math.abs(page - 1))
+
+	return query;
 };
 
 const incrementPostLikes = postID => {
@@ -137,6 +163,7 @@ const removePostLike = (userID, postID) => {
 module.exports = {
     create,
 	addPostLike,
+	postAlreadyLiked,
 	fetch,
 	fetchByRoom,
 	fetchRecent,

@@ -32,7 +32,7 @@ app.put("/:id", async (request, response) => {
 });
 
 app.delete("/:id", async (request, response) => {
-    if(request.user.permissions["UU"] !== true) return response.status(403).json({message: "You are not allowed to perform this action"});
+    if(request.user.permissions["UD"] !== true) return response.status(403).json({message: "You are not allowed to perform this action"});
     const {id} = request.params;
     const deletedRole = await Roles.remove(id);
     if(!deletedRole) return response.status(400).json({message: "This role cannot be deleted"});

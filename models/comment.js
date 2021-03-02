@@ -9,6 +9,10 @@ const addCommentLike = (userID, commentID) => {
     return database('liked_comments').insert({ user_id: userID, comment_id: commentID });
 };
 
+const commentAlreadyLiked = (userID, commentID) => {
+    return database("liked_comments").where({user_id: userID, comment_id: commentID}).first();
+}
+
 // Fetch post comments by recent
 // Should this be in post model? Maybe not because the URI will end in /comment anyway.
 const fetchRecent = postID => {
@@ -68,6 +72,7 @@ const removeCommentLike = (userID, commentID) => {
 module.exports = {
     add,
     addCommentLike,
+    commentAlreadyLiked,
     fetchRecent,
     fetchPopular,
     incrementCommentLikes,

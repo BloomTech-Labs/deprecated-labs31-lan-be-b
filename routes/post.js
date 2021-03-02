@@ -7,9 +7,9 @@ const app = express.Router();
 // Create post
 app.post('/create', (request, response) => {
     const userID = request.user.id;
-    const { question, answer, track } = request.body;
+    const { question, answer, track, room_id} = request.body;
     
-    Post.create({ user_id: userID, question, answer, track })
+    Post.create({ user_id: userID, question, answer, track, room_id})
         .then(res => response.status(200).json({ message: 'Post created successfully' }))
         .catch(err => {
             console.log(err);
@@ -53,9 +53,11 @@ app.post('/popular', (request, response) => {
 // Searches
 app.post('/search', (request, response) => {
     const search = request.body.search;
-    const {orderBy} = req.query;
+    const room_id = request.body.room_id;
+    const {orderBy, page, postsPerPage} = request.query;
+    const numOfPosts = ! Number.isNaN(parseInt(postsPerPage)) && parseInt(postsPerPage) > 0 ? parseInt(postsPerPage): 10;
     
-    Post.fetchSearch(search)
+    Post.fetchSearch(search, orderBy, page, numOfPosts, room_id)
         .then(res => response.status(200).json(res))
         .catch(err => {
             console.log(err);
@@ -64,9 +66,12 @@ app.post('/search', (request, response) => {
 });
 
 // Like post
-app.get('/like/:id', (request, response) => {
+app.get('/like/:id', async (request, response) => {
     const userID = request.user.id;
     const postID = request.params.id;
+
+    const alreadyLiked = await Post.postAlreadyLiked(userID, postID);
+    if(alreadyLiked) return response.status(400).json({message: "Post already liked"});
 
     Post.incrementPostLikes(postID)
         .then(res => {
